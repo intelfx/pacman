@@ -12,6 +12,7 @@ sources = [
   'strip.sh.in',
   'sudo.sh.in',
   'vcs.sh.in',
+  'sccache.sh.in',
 ]
 
 foreach src : sources

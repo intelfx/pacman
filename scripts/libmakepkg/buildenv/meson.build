@@ -7,6 +7,7 @@ sources = [
   'lto.sh.in',
   'makeflags.sh.in',
   'rust.sh.in',
+  'sccache.sh.in',
 ]
 
 foreach src : sources
