@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+[[ -n "$LIBMAKEPKG_EXECUTABLE_SCCACHE_SH" ]] && return
+LIBMAKEPKG_EXECUTABLE_SCCACHE_SH=1
+
+MAKEPKG_LIBRARY=${MAKEPKG_LIBRARY:-'@libmakepkgdir@'}
+
+source "$MAKEPKG_LIBRARY/util/option.sh"
+
+build_options+=('sccache')
+buildenv_functions+=('buildenv_sccache')
+
+buildenv_sccache() {
+	if check_buildoption "sccache" "y"; then
+		if [[ ${RUSTC_WRAPPER+set} ]]; then
+			error "$(gettext "%s option was requested but %s environment variable is already set.")" "sccache" '$RUSTC_WRAPPER'
+			return 1
+		fi
+		# Should not fail; sccache presence is checked separately
+		export RUSTC_WRAPPER="$(type -p sccache)"
+	fi
+}

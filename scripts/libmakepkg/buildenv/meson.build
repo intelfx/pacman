@@ -6,6 +6,7 @@ sources = [
   'debugflags.sh.in',
   'lto.sh.in',
   'makeflags.sh.in',
+  'sccache.sh.in',
 ]
 
 foreach src : sources
