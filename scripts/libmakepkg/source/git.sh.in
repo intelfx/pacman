@@ -65,8 +65,8 @@ download_git() {
 		local remote_url="$(git config --get remote.origin.url)"
 		if [[ "${url%%.git}" != "${remote_url%%.git}" ]] ; then
 			error "$(gettext "%s is not a clone of %s")" "$dir" "$url"
-			plainerr "$(gettext "Aborting...")"
-			exit 1
+			plain "$(gettext "Updating...")"
+			git config remote.origin.url "$url"
 		fi
 		msg2 "$(gettext "Updating %s %s repo...")" "${repo}" "git"
 		if ! git fetch --all -p; then
