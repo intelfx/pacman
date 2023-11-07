@@ -137,7 +137,11 @@ clean_up() {
 
 		# If it's a clean exit and -c/--clean has been passed...
 		msg "$(gettext "Cleaning up...")"
-		rm -rf "$pkgdirbase" "$srcdir"
+		if [[ $BUILDDIR -ef "$startdir" ]]; then
+			rm -rf "$pkgdirbase" "$srcdir"
+		else
+			rm -rf "$BUILDDIR/$pkgbase"
+		fi
 		if [[ -n $pkgbase ]]; then
 			local fullver=$(get_full_version)
 			# Can't do this unless the BUILDSCRIPT has been sourced.
