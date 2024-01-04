@@ -76,6 +76,21 @@ download_git() {
 	fi
 }
 
+__git_dir() {
+	git -C "$1" rev-parse --absolute-git-dir
+}
+
+__git_link() {
+	local src="$1" dst="$2"
+	local srcgitdir dstgitdir
+	srcgitdir="$(__git_dir "$src")"
+	dstgitdir="$(__git_dir "$dst")"
+	if [[ -s "$dstgitdir/objects/info/alternates" ]]; then
+		realpath -qe --relative-to="$dstgitdir/objects" "$srcgitdir/objects" > "$dstgitdir/objects/info/alternates"
+	fi
+	git -C "$dst" remote set-url origin "$(realpath -qe --relative-to="$dst" "$src")"
+}
+
 extract_git() {
 	local netfile=$1 tagname
 
@@ -91,14 +106,13 @@ extract_git() {
 	local updating=0
 	if [[ -d "${dir##*/}" ]]; then
 		updating=1
-		cd_safe "${dir##*/}"
-		if ! git fetch; then
+		if ! (__git_link "$dir" "${dir##*/}" && git -C "${dir##*/}" fetch); then
 			error "$(gettext "Failure while updating working copy of %s %s repo")" "${repo}" "git"
 			plainerr "$(gettext "Aborting...")"
 			exit 1
 		fi
 		cd_safe "$srcdir"
-	elif ! git clone --origin=origin -s "$dir" "${dir##*/}"; then
+	elif ! (git clone --origin=origin -s "$dir" "${dir##*/}" && __git_link "$dir" "${dir##*/}"); then
 		error "$(gettext "Failure while creating working copy of %s %s repo")" "${repo}" "git"
 		plainerr "$(gettext "Aborting...")"
 		exit 1
