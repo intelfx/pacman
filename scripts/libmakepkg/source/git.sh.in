@@ -86,9 +86,9 @@ __git_link() {
 	srcgitdir="$(__git_dir "$src")"
 	dstgitdir="$(__git_dir "$dst")"
 	if [[ -s "$dstgitdir/objects/info/alternates" ]]; then
-		realpath -qe --relative-to="$dstgitdir/objects" "$srcgitdir/objects" > "$dstgitdir/objects/info/alternates"
+		realpath -qe --relative-base="$startdir" --relative-to="$dstgitdir/objects" "$srcgitdir/objects" > "$dstgitdir/objects/info/alternates"
 	fi
-	git -C "$dst" remote set-url origin "$(realpath -qe --relative-to="$dst" "$src")"
+	git -C "$dst" remote set-url origin "$(realpath -qe --relative-base="$startdir" --relative-to="$dst" "$src")"
 }
 
 extract_git() {
