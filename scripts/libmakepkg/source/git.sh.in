@@ -97,6 +97,13 @@ extract_git() {
 	local fragment=$(get_uri_fragment "$netfile")
 	local repo=$(get_filename "$netfile")
 
+	if in_array "$repo" "${noextract[@]}"; then
+		# skip source files in the noextract=() array
+		# these are marked explicitly to NOT be extracted
+		warning "$(gettext "Not creating working copy of %s %s repo")" "${repo}" "git"
+		return 0
+	fi
+
 	local dir=$(get_filepath "$netfile")
 	[[ -z "$dir" ]] && dir="$SRCDEST/$(get_filename "$netfile")"
 
