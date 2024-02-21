@@ -53,7 +53,7 @@ get_compression_command() {
 		*.tar.gz)  fallback=(gzip -c -f -n) ;;
 		*.tar.bz2) fallback=(bzip2 -c -f) ;;
 		*.tar.xz)  fallback=(xz -c -z -) ;;
-		*.tar.zst) fallback=(zstd -c -z -q -) ;;
+		*.tar.zst) fallback=(zstd -T0 -c -z -q -) ;;
 		*.tar.lrz) fallback=(lrzip -q) ;;
 		*.tar.lzo) fallback=(lzop -q) ;;
 		*.tar.Z)   fallback=(compress -c -f) ;;
