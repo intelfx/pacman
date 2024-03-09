@@ -26,10 +26,17 @@ MAKEPKG_LIBRARY=${MAKEPKG_LIBRARY:-'@libmakepkgdir@'}
 source "$MAKEPKG_LIBRARY/util/option.sh"
 source "$MAKEPKG_LIBRARY/util/util.sh"
 
-buildenv_vars+=('RUSTFLAGS' 'DEBUG_RUSTFLAGS')
+buildenv_vars+=('RUSTFLAGS' 'LTO_RUSTFLAGS' 'LTO_CARGOFLAGS' 'DEBUG_RUSTFLAGS')
 buildenv_functions+=('buildenv_rust')
 
 buildenv_rust() {
+	local var
+	if check_option "lto" "y" && ! check_option "buildflags" "n"; then
+		for var in ${LTO_CARGOFLAGS:-"CARGO_PROFILE_RELEASE_LTO=on"}; do
+			export "${var?}"
+		done
+		append_once RUSTFLAGS "$LTO_RUSTFLAGS"
+	fi
 	if check_option "debug" "y" && ! check_option "buildflags" "n"; then
 		append_once DEBUG_RUSTFLAGS "--remap-path-prefix=$srcdir=${DBGSRCDIR:-/usr/src/debug}/${pkgbase}"
 		append_once RUSTFLAGS "$DEBUG_RUSTFLAGS"

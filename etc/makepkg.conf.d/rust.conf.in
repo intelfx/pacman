@@ -11,6 +11,23 @@
 # linkman:rustc[1] for more details on the available flags.
 #RUSTFLAGS="-C opt-level=3"
 
+# Additional compiler flags appended to `RUSTFLAGS` when ``options=(lto)''
+# is used. Use ``-C lto=thin'' for thin LTO, and/or ``-C linker-plugin-lto''
+# for cross-language LTO using the LLVM linker plugin (but see the notes below).
+# Read linkman:rustc[1] for more details on the available flags.
+#LTO_RUSTFLAGS="-C lto"
+
+# Additional configuration passed to Cargo when ``options=(lto)'' is used.
+# Use ``CARGO_PROFILE_RELEASE_LTO=thin'' for thin LTO.
+# NOTE: this variable is a whitespace-separated list of additional
+#       variables that will be exported into the environment.
+# NOTE: using this variable is preferable to appending ``-C lto'' to
+#       ``RUSTFLAGS`` because certain crate types do not support LTO,
+#       causing hard errors if ``-C lto'' is set on the command line.
+# See <https://doc.rust-lang.org/cargo/reference/environment-variables.html>
+# for more details on the available environment variables.
+#LTO_CARGOFLAGS="CARGO_PROFILE_RELEASE_LTO=thin"
+
 # Additional compiler flags appended to `RUSTFLAGS` for use in debugging.
 # Usually this would include: ``-C debuginfo=2''. Read linkman:rustc[1] for
 # more details on the available flags.
