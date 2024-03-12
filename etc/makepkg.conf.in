@@ -43,7 +43,7 @@ CHOST="@CHOST@"
 #LDFLAGS=""
 #LTOFLAGS="-flto"
 #-- Make Flags: change this for DistCC/SMP systems
-#MAKEFLAGS="-j2"
+#MAKEFLAGS="-j$(nproc)"
 #-- Debugging flags
 #DEBUG_CFLAGS="-g"
 #DEBUG_CXXFLAGS="-g"
