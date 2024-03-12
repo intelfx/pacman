@@ -38,6 +38,9 @@ buildenv_rust() {
 		append_once RUSTFLAGS "$LTO_RUSTFLAGS"
 	fi
 	if check_option "debug" "y" && ! check_option "buildflags" "n"; then
+		for var in ${DEBUG_CARGOFLAGS:-"CARGO_PROFILE_RELEASE_DEBUG=full"}; do
+			export "${var?}"
+		done
 		append_once DEBUG_RUSTFLAGS "--remap-path-prefix=$srcdir=${DBGSRCDIR:-/usr/src/debug}/${pkgbase}"
 		append_once RUSTFLAGS "$DEBUG_RUSTFLAGS"
 	fi

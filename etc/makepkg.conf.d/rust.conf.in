@@ -32,3 +32,8 @@
 # Usually this would include: ``-C debuginfo=2''. Read linkman:rustc[1] for
 # more details on the available flags.
 #DEBUG_RUSTFLAGS="-C debuginfo=2"
+
+# Additional parameters to Cargo when ``options=(debug)'' is used.
+# NOTE: this variable is a space-separated list of additional variables
+# that will be exported into the environment.
+#DEBUG_CARGOFLAGS="CARGO_PROFILE_RELEASE_DEBUG=full"
