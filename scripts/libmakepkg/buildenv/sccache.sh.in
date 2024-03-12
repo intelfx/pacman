@@ -12,11 +12,14 @@ buildenv_functions+=('buildenv_sccache')
 
 buildenv_sccache() {
 	if check_buildoption "sccache" "y"; then
-		if [[ ${RUSTC_WRAPPER+set} ]]; then
-			error "$(gettext "%s option was requested but %s environment variable is already set.")" "sccache" '$RUSTC_WRAPPER'
+		local sccache
+		sccache="$(type -p sccache)"
+		if [[ $RUSTC_WRAPPER == "$sccache" ]]; then
+			return 0
+		elif [[ ${RUSTC_WRAPPER+set} ]]; then
+			error "$(gettext "%s option was requested but %s environment variable is already set to %s.")" "sccache" '$RUSTC_WRAPPER' "${RUSTC_WRAPPER@Q}"
 			return 1
 		fi
-		# Should not fail; sccache presence is checked separately
-		export RUSTC_WRAPPER="$(type -p sccache)"
+		export RUSTC_WRAPPER="$sccache"
 	fi
 }
